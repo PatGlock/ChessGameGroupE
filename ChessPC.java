@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-
 public abstract class ChessPC {
     static List<Piece> Wpieces = new ArrayList<>(); // Store Piece objects instead of Strings
 
@@ -44,32 +43,76 @@ public abstract class ChessPC {
         Bpieces.add(new Piece("king", 7, 4));
     }
 
-    public static int findPieceIndexW (String pieceName) {
-        for (Piece piece : Wpieces) ||((Piece piece:
-        Bpieces)){ // Loop through Piece objects
+    public static int findPieceIndexW (String pieceName) {//NEED TO COME BACK TOO
+        for (Piece piece : pieces { // Loop through Piece objects
             if (piece.name.equals(pieceName)) {
                 return piece.getIndex(); // Return the index automatically
             }
+    }
 
+    class Piece {
+        String name;
+        int index;
+
+        public Piece(String name, int row, int col) {
+            this.name = name;
+            this.index = (8 * row) + col; // Calculate index
         }
-        return -1; // If not found
-    }
 
-class Piece {
-    String name;
-    int index;
+        public int getIndex() {// RETURN THE INDEX
+            return index;
+        }
+       public  class ChessPC {
+           public static void ChessPC(String[] args) {
+               List<Piece> pieces = new ArrayList<>();
+               pieces.add(new Piece("rook");
+               pieces.add(new Piece("pawn");
+               pieces.add(new Piece("knight");
+               pieces.add(new Piece("bishop");
+               pieces.add(new Piece("queen");
+               pieces.add(new Piece("king");
 
-    public Piece(String name, int row, int col) {
-        this.name = name;
-        this.index = (8 * row) + col; // Calculate index
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    @Override
-    public String toString() {
-        return name + " at index " + index;
-    }
+       }
+           public  void move(int direction){
+               switch (direction){
+                   case 1 //up
+                       row +=1;
+                        break;
+                   case 2 //down
+                       row -=1;
+                        break;
+                   case 3 //left
+                       col -=1;
+                        break;
+                   case 4 //right
+                       col +=;
+                        break;
+                        //idk if i need an invalid move tho
+               }
+           }
+           public King (Piece) {//King movement kinda
+               if (pieces[5].equals("king")) {
+                   //Call the move function
+           }return ("Not vaild move! Try again.")
+           }
+           public Queen(Piece){//Queen movement kind
+               if (pieces[4].equals("queen"))
+                   move()// maybe called wrong{
+             }else{
+               move(1);
+               move(4);
+           }else{
+               move(1);
+               move(3);
+           }else{
+               move(2);
+               move(4);
+           }else{
+               move(2)
+               move(3);
+           }
+           }
+       }
 }
+
+        public abstract boolean move(int newX, int newY);// UPDATE ARRAY FOR NEW X AND Y MAYBE
