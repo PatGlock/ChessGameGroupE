@@ -1,16 +1,14 @@
 public class Piece {
     // Fields (object properties)
     private String piece;
-    private Boolean taken;
     private int color;
     private Boolean flag;
     private int x;
     private int y;
-
+    public static Piece empty= new Piece("empty",0,false);
     // Constructor
-    public Piece(String piece, Boolean taken, int color, Boolean flag) {
+    public Piece(String piece, int color, Boolean flag) {
         this.piece = piece;
-        this.taken = taken;
         this.color = color;
         this.flag = flag;
     }
@@ -19,15 +17,27 @@ public class Piece {
         this.x = x;
     }
 
+    public int getX(){return x;}
+
     public void setY(int y) {
         this.y = y;
     }
 
+    public int getY(){return y;}
+
     //method to determine if the piece can complete en passant/castling
-    public Boolean getFlag(){return flag; }
+    public Boolean getFlag() {
+        return flag;
+    }
 
     //method to set pawn flag to 0 after it has moved for a turn
-    public void setFlag(Boolean flag){this.flag = flag; }
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
+    }
+
+    public void setPiece(String piece) {
+        this.piece = piece;
+    }
 
     // method to determine what piece it is
     public String getPiece() {
@@ -39,16 +49,6 @@ public class Piece {
         this.piece = piece;
     }
 
-    // Getter for taken
-    public Boolean isTaken() {
-        return taken;
-    }
-
-    // Setter for piece
-    public void takePiece() {
-        this.taken = true;
-    }
-
     // Getter for color
     public int getColor() {
         return color;
@@ -58,4 +58,7 @@ public class Piece {
     public void setColor(int color) {
         this.color = color;
     }
+
 }
+
+
