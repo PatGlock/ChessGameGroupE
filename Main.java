@@ -1,22 +1,18 @@
-import javax.swing.*;
-import java.awt.*;
-
 public class Main {
     public static void main(String[] args) {
-        ImageSaver imageSaver = new ImageSaver();
+        ChessBoardDisplay board = new ChessBoardDisplay(); // Create chess board
 
-        // Create a JFrame to display the image
-        JFrame frame = new JFrame("Chess Piece Display");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
+        // Step 1: Place all white pieces with their correct image paths
+        for (ChessPC.Piece piece : ChessPC.Wpieces) {
+            board.addPiece(piece.getIndex() / 8, piece.getIndex() % 8, piece.getImagePath());
+        }
 
-        // Convert BufferedImage to an ImageIcon
-        ImageIcon icon = new ImageIcon(imageSaver.getImage(0)); // Get the King image
+        // Step 2: Place all black pieces with their correct image paths
+        for (ChessPC.Piece piece : ChessPC.Bpieces) {
+            board.addPiece(piece.getIndex() / 8, piece.getIndex() % 8, piece.getImagePath());
+        }
 
-        // Display the image in a JLabel
-        JLabel label = new JLabel(icon);
-        frame.add(label);
-
-        frame.setVisible(true);
+        // Step 3: Test output in console
+        ChessPC.displayPieces(); // Print all piece positions and linked images
     }
 }
