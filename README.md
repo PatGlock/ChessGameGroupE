@@ -30,7 +30,7 @@ Validate        Contains static methods for move validation (e.g., knight logic,
 
 
 ### Contributors 
--
+- Myah Jenkins
 -
 -
 -
