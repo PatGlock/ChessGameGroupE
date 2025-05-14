@@ -5,30 +5,88 @@ public class ChessPC {
     static List<Piece> Wpieces = new ArrayList<>(); // White Pieces
     static List<Piece> Bpieces = new ArrayList<>(); // Black Pieces
 
+    // Nested Piece class
     static class Piece {
         String name;
-        int index;
+        int row, col;
         String imagePath; // Store the image file path
 
         // Constructor to initialize piece with name, position, and image file
         public Piece(String name, int row, int col, String imageFileName) {
             this.name = name;
-            this.index = (8 * row) + col; // Calculate board index
+            this.row = row;
+            this.col = col;
             this.imagePath = "images/" + imageFileName; // Store image path
         }
 
-        // Method to return the index
-        public int getIndex() {
-            return index;
-        }
-
-        // Method to return the image path
+        // Method to return image path
         public String getImagePath() {
             return imagePath;
         }
+
+        // Method to return board index
+        public int getIndex() {
+            return (8 * row) + col;
+        }
+
+        // Method for King movement
+        public boolean moveKing(int newRow, int newCol) {
+            if (Math.abs(newRow - row) <= 1 && Math.abs(newCol - col) <= 1) {
+                row = newRow;
+                col = newCol;
+                return true;
+            }
+            return false;
+        }
     }
 
-    // Static block initializes white pieces with image paths
+    // Method to check if King is in check
+    public static boolean isKingInCheck(Piece king, List<Piece> opponents) {
+        for (Piece piece : opponents) {
+            if (piece.name.contains("rook") && (piece.row == king.row || piece.col == king.col)) {
+                return true; // Rook attack
+            }
+            if (piece.name.contains("bishop") && Math.abs(piece.row - king.row) == Math.abs(piece.col - king.col)) {
+                return true; // Bishop attack
+            }
+            if (piece.name.contains("queen") && (piece.row == king.row || piece.col == king.col ||
+                    Math.abs(piece.row - king.row) == Math.abs(piece.col - king.col))) {
+                return true; // Queen attack
+            }
+            if (piece.name.contains("knight") && (Math.abs(piece.row - king.row) == 2 && Math.abs(piece.col - king.col) == 1 ||
+                    Math.abs(piece.row - king.row) == 1 && Math.abs(piece.col - king.col) == 2)) {
+                return true; // Knight attack
+            }
+        }
+        return false;
+    }
+
+    // Method to check if King is in checkmate
+    public static boolean isCheckmate(Piece king, List<Piece> opponents) {
+        if (!isKingInCheck(king, opponents)) {
+            return false; // King is not in check, so no checkmate
+        }
+
+        // Try all possible moves for the King
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                int newRow = king.row + dr;
+                int newCol = king.col + dc;
+
+                // Ensure move is inside board and not under threat
+                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                    Piece tempKing = new Piece(king.name, newRow, newCol, king.imagePath);
+                    if (!isKingInCheck(tempKing, opponents)) {
+                        return false; // The king can escape
+                    }
+                }
+            }
+        }
+
+        return true; // No valid moves left, checkmate
+    }
+
+    // Static block initializes white pieces 
     static {
         Wpieces.add(new Piece("pawn1", 1, 0, "PawnW.png"));
         Wpieces.add(new Piece("pawn2", 1, 1, "PawnW.png"));
@@ -45,10 +103,10 @@ public class ChessPC {
         Wpieces.add(new Piece("bishop1", 0, 2, "BishopW.png"));
         Wpieces.add(new Piece("bishop2", 0, 5, "BishopW.png"));
         Wpieces.add(new Piece("queen", 0, 3, "QueenW.png"));
-        Wpieces.add(new Piece("king", 0, 4, "KingW.png"));
+        Wpieces.add(new Piece("king", 0, 4, "KingW.png"));    
     }
 
-    // Static block initializes black pieces with image paths
+    // Static block initializes black pieces 
     static {
         Bpieces.add(new Piece("pawn1", 6, 0, "PawnB.png"));
         Bpieces.add(new Piece("pawn2", 6, 1, "PawnB.png"));
@@ -64,65 +122,20 @@ public class ChessPC {
         Bpieces.add(new Piece("knight2", 7, 6, "KnightB.png"));
         Bpieces.add(new Piece("bishop1", 7, 2, "BishopB.png"));
         Bpieces.add(new Piece("bishop2", 7, 5, "BishopB.png"));
-        Bpieces.add(new Piece("queen", 7, 3, "QueenB.png"));
-        Bpieces.add(new Piece("king", 7, 4, "KingB.png"));
+        Bpieces.add(new Piece("queen", 7, 3, "QueenB.png")); 
+        Bpieces.add(new Piece("king", 7, 4, "KingB.png"));    
     }
 
-    // Method to display all pieces with image paths this does have print index tho
+    // Method to display all pieces with positions
     public static void displayPieces() {
         System.out.println("White Pieces:");
         for (Piece p : Wpieces) {
-            System.out.println(p.name + " at index: " + p.getIndex() + " | Image Path: " + p.getImagePath());
+            System.out.println(p.name + " at index: " + p.getIndex() + " (" + p.row + "," + p.col + ") | Image Path: " + p.getImagePath());
         }
 
         System.out.println("\nBlack Pieces:");
         for (Piece p : Bpieces) {
-            System.out.println(p.name + " at index: " + p.getIndex() + " | Image Path: " + p.getImagePath());
+            System.out.println(p.name + " at index: " + p.getIndex() + " (" + p.row + "," + p.col + ") | Image Path: " + p.getImagePath());
         }
     }
 }
-  
-       }
-           public  void move(int direction){
-               switch (direction){
-                   case 1 //up
-                       row +=1;
-                        break;
-                   case 2 //down
-                       row -=1;
-                        break;
-                   case 3 //left
-                       col -=1;
-                        break;
-                   case 4 //right
-                       col +=;
-                        break;
-                        //idk if i need an invalid move tho
-               }
-           }
-           public King (Piece) {//King movement kinda
-               if (pieces[5].equals("king")) {
-                   //Call the move function
-           }return ("Not vaild move! Try again.")
-           }
-           public Queen(Piece){//Queen movement kind
-               if (pieces[4].equals("queen"))
-                   move()// maybe called wrong{
-             }else{
-               move(1);
-               move(4);
-           }else{
-               move(1);
-               move(3);
-           }else{
-               move(2);
-               move(4);
-           }else{
-               move(2)
-               move(3);
-           }
-           }
-       }
-}
-
-        public abstract boolean move(int newX, int newY);// UPDATE ARRAY FOR NEW X AND Y MAYBE
