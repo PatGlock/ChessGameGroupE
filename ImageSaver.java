@@ -2,25 +2,26 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL; // Added missing import
+import java.net.URL; // Import for resource loading
 
 public class ImageSaver {
-    private final BufferedImage[] pieceImages;
+    private final BufferedImage[] pieceImages; // Corrected array declaration
 
     // Constructor to initialize the images
     public ImageSaver() {
-        pieceImages = new BufferedImage[6]; // Fixed array size to hold all images
+        pieceImages = new BufferedImage[12]; // Fixed array size
         initPieceImages();
     }
 
-    // Load images directly from resources inside the class
+    // Load images from resources or local folder
     private void initPieceImages() {
-        String[] imageFiles = {"download.png"};
+        String[] imageFiles = {"BishopB", "BishopW", "KingW", "KingB", "KnightB", "KnightW",
+                "PawnB", "PawnW", "QueenB", "QueenW", "RookB", "RookW"};
 
         for (int i = 0; i < imageFiles.length; i++) {
             try {
                 // Step 1: Try loading from project resources
-                URL resourcePath = getClass().getResource("/images/" + imageFiles[i]);
+                URL resourcePath = getClass().getResource("/images/" + imageFiles[i] + ".png");
                 System.out.println("Checking resource path for " + imageFiles[i] + ": " + resourcePath);
 
                 if (resourcePath != null) {
@@ -28,7 +29,7 @@ public class ImageSaver {
                     System.out.println(imageFiles[i] + " loaded successfully from resources!");
                 } else {
                     // Step 2: Try loading from local folder
-                    File imageFile = new File("images/" + imageFiles[i]);
+                    File imageFile = new File("images/" + imageFiles[i] + ".png");
                     System.out.println("Checking local path for " + imageFiles[i] + ": " + imageFile.getAbsolutePath());
 
                     if (imageFile.exists()) {
@@ -45,7 +46,7 @@ public class ImageSaver {
         }
     }
 
-    // Method to get an image
+    // Method to get an image by index
     public BufferedImage getImage(int index) {
         return pieceImages[index];
     }
