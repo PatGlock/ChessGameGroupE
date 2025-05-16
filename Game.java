@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 //main class to run for game
 public class Game {
-    private static final Display disp = new Display();
+    //private static final Display disp = new Display();
     public static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
         List<Piece> board = initBoard();
@@ -36,6 +36,11 @@ public class Game {
         displayEnd();
 
     }
+
+    /**
+     *
+     * @param turnCounter
+     */
     public static void printTurn(int turnCounter){
         if (turnCounter%2==0) {
             System.out.println("Whites turn to play");
@@ -46,6 +51,14 @@ public class Game {
         }
 
     }
+
+    /**
+     * This function takes the board, gathers and reformats the moves
+     * Then applies the movePiece function
+     * It returns a Boolean to make sure a move was made
+     * @param board
+     * @return
+     */
     public static Boolean getMove(List<Piece> board){
         System.out.println("Please enter the space of the piece you wish to move");
         String pos = scan.nextLine();
@@ -64,6 +77,15 @@ public class Game {
         return false;
     }
 
+    /**
+     * This function attempts the move and sends back the board with the completed move if it's validated
+     * Otherwise it returns the original board
+     * Very rudementary and it doesn't check for collision yet(Todo)
+     * @param posi
+     * @param desti
+     * @param board
+     * @return
+     */
     private static List<Piece> movePiece(ArrayList<Integer> posi, ArrayList<Integer> desti, List<Piece> board) {
         //create a copy of the board to test the move on
         List<Piece> tempBoard = board;
@@ -157,16 +179,14 @@ public class Game {
         }
         return tempBoard;
     }
-
+        //todo - Takes the board and makes sure that the player did not put themselves in check
         public static Boolean checkCheck (List < Piece > tempBoard) {
 
-            return null;
+            return true;
         }
 
-        /**
-         * This creates the board as a list, using modulo 8 arithmetic to validate moves
-         * @return
-         */
+        /// This creates the board as a list, using modulo 8 arithmetic to validate moves
+        /// @return
         public static List<Piece> initBoard () {
             //  A board in which the blank pieces are a third color
             // Taken pieces will become color 0 with the Piece.setColor(0)
@@ -198,17 +218,23 @@ public class Game {
             board.add(new Piece("rook", 2, true));
             return board;
         }
-
+        /// Simple greeting
         public static void printGreeting () {
             System.out.println("Welcome to our chess engine!\n Please enter moves using chess board locations(a-h)(1-8)");
         }
+
         public static void displayMove () {
 
         }
-        public static ArrayList<Integer> setFormat (String s){
+
+    /**
+     * Takes the move string and turns it into the usable integer array
+     * @param s
+     * @return
+     */
+    public static ArrayList<Integer> setFormat (String s){
             ArrayList<Integer> output = new ArrayList<>();
-            var Starray = s.toCharArray();
-            char newS1 = Starray[0];
+            char newS1 = s.charAt(0);
             newS1 = switch (newS1) {
                 case 'a' -> 0;
                 case 'b' -> 1;
@@ -220,67 +246,82 @@ public class Game {
                 case 'h' -> 7;
                 default -> 20;
             };
-            char c = Starray[1];
-            var tempS2 = (int) c;
-            tempS2--;
+            int tempS2 = Integer.parseInt(String.valueOf(s.charAt(1)));
+            tempS2 = tempS2-1;
             output.add((int) newS1);
             output.add(tempS2);
             return output;
         }
-        public static Boolean checkMate () {
+
+    /**
+     * Checks for checkmate
+     * unfinished
+     * @return
+     */
+    public static Boolean checkMate () {
             return null;
         }
-        public static void displayEnd () {
+
+    /**
+     * Displays an end message in the graphic
+     * unfinished
+     */
+    public static void displayEnd () {
         }
-        private static List<Piece> takePiece (List < Piece > tempBoard,int indexMoved, int indexTaken){
+
+    /**
+     * Completes the process of switching the pieces and voiding the taken piece.
+     * Could add a point counter in iterations
+     * @param tempBoard
+     * @param indexMoved
+     * @param indexTaken
+     * @return
+     */
+        private static List<Piece> takePiece (List < Piece > tempBoard,int indexMoved, int indexTaken) {
             tempBoard.set(indexTaken, tempBoard.get(indexMoved));
             tempBoard.set(indexMoved, Piece.empty);
             return tempBoard;
         }
-
     /**
-     *
+     * Checks that the y values match in the position and destination
      * @param posi
      * @param desti
      * @return Boolean
      */
         private static Boolean inRow(ArrayList<Integer> posi, ArrayList<Integer> desti){
-            if(posi.get(0)==desti.get(0)){
-                return true;
-            }
-            return false;
+            return posi.get(0).equals(desti.get(0));
         }
 
     /**
-     *
+     * Checks that the x values match in the position and destination
      * @param posi
      * @param desti
      * @return Boolean
      */
         private static Boolean inColumn(ArrayList<Integer> posi, ArrayList<Integer> desti){
-            if(posi.get(1)==desti.get(1)){
-                return true;
-            }
-            return false;
+            return posi.get(1).equals(desti.get(1));
         }
 
     /**
-     *
+     * Checks that the squares(accounting for pos and neg values) of the difference are equal
+     * This returns a boolean True if it is on a diagnal
      * @param posi
      * @param desti
      * @return Boolean
      */
         private static Boolean inDiag(ArrayList<Integer> posi, ArrayList<Integer> desti){
-            int difX = posi.get(0)-desti.get(0);
-            int difY = posi.get(1)-desti.get(1);
-            if (difX%difY==0){
-                return true;
+            int difX = (posi.get(0)-desti.get(0))^2;
+            int difY = (posi.get(1)-desti.get(1))^2;
+            if (difY!=0) {
+                return difX == difY ;
             }
             return false;
         }
 
     /**
-     *
+     *Checks that the squares add up to 5
+     * Since the values are only integers,
+     * the only combinations that would allow this are 2 in one direction and 1 in another
      * @param posi
      * @param desti
      * @return Boolean
@@ -288,14 +329,12 @@ public class Game {
         private static Boolean knightMove(ArrayList<Integer> posi, ArrayList<Integer> desti){
             int difX = (posi.get(0)-desti.get(0))^2;
             int difY = (posi.get(1)-desti.get(1))^2;
-            if (difX+difY==5){
-                return true;
-            }
-            return false;
+            return difX + difY == 5;
         }
 
     /**
-     *
+     * For the king, makes sure that it only goes 1 square
+     * Castling in progress
      * @param posi
      * @param desti
      * @return Boolean
@@ -303,19 +342,17 @@ public class Game {
         private static Boolean adjCheck(ArrayList<Integer> posi, ArrayList<Integer> desti){
             int difX = (posi.get(0)-desti.get(0))^2;
             int difY = (posi.get(1)-desti.get(1))^2;
-            Boolean corner = false;
+            boolean corner = false;
             if (difX+difY==2&&inDiag(posi,desti)){
                 corner = true;
             }
-            if (difX+difY==1||corner){
-                return true;
-            }
+            return difX + difY == 1 || corner;
             //todo: Castling
-            return false;
         }
 
     /**
-     *
+     * Checks that the pawn only moves 1(for now)
+     * and only goes diagonal if there is a piece to take
      * @param tempBoard
      * @param indexP
      * @param indexD
@@ -339,9 +376,6 @@ public class Game {
                 if(Objects.equals(tempBoard.get(indexD).getPiece(),"blank")){check2 = true;}
             }
             //todo: En Passant, Promoting, and double forward
-            if(check1&&check2){
-                return true;
-            }
-            return false;
+            return check1 && check2;
         }
 }
