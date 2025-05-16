@@ -33,4 +33,4 @@ Validate        Contains static methods for move validation (e.g., knight logic,
 - Myah Jenkins
 - Marcellus Blanc
 - Josiah Young
--
+- Devin Gloeckner
